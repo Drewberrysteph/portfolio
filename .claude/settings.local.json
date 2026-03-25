@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:bryllim.com)",
+      "Bash(cp \"/c/Users/Administrator/.claude/image-cache/cdb09e3c-dcf8-4ad2-b230-1e405e303d52/7.png\" \"/c/Users/Administrator/code/portfolio/project-airtasker.png\")",
+      "Bash(cp \"/c/Users/Administrator/.claude/image-cache/cdb09e3c-dcf8-4ad2-b230-1e405e303d52/8.png\" \"/c/Users/Administrator/code/portfolio/project-oneflare.png\")",
+      "Bash(cp \"/c/Users/Administrator/.claude/image-cache/cdb09e3c-dcf8-4ad2-b230-1e405e303d52/9.png\" \"/c/Users/Administrator/code/portfolio/project-pursuited.png\")",
+      "Bash(git config:*)",
+      "Bash(gh auth:*)",
+      "Bash(git remote:*)",
+      "Bash(git push:*)"
+    ]
+  }
+}

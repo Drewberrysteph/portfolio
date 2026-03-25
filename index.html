@@ -1,0 +1,897 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>drew.cordano</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%230a0a0a'/><text x='16' y='23' text-anchor='middle' font-family='monospace' font-size='20' font-weight='700' fill='%236ee7b7'>D</text></svg>" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg: #0a0a0a;
+      --surface: #111111;
+      --border: #1e1e1e;
+      --text: #e5e5e5;
+      --muted: #555555;
+      --accent: #6ee7b7;
+      --font-mono: 'JetBrains Mono', monospace;
+      --font-sans: 'Inter', sans-serif;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-sans);
+      font-size: 16px;
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── Layout ── */
+    .container {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    section {
+      padding: 96px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    section:last-child {
+      border-bottom: none;
+    }
+
+    /* ── Nav ── */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      padding: 20px 0;
+      background: rgba(10, 10, 10, 0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    nav .container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .nav-logo {
+      font-family: var(--font-mono);
+      font-size: 14px;
+      color: var(--accent);
+      text-decoration: none;
+      letter-spacing: -0.02em;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 32px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-size: 13px;
+      color: var(--muted);
+      text-decoration: none;
+      letter-spacing: 0.04em;
+      transition: color 0.2s;
+      position: relative;
+      padding-bottom: 2px;
+    }
+
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0;
+      width: 0; height: 1px;
+      background: var(--accent);
+      transition: width 0.25s ease;
+    }
+
+    .nav-links a:hover {
+      color: var(--text);
+    }
+
+    .nav-links a:hover::after {
+      width: 100%;
+    }
+
+    /* ── Hero ── */
+    #hero {
+      padding-top: 180px;
+      padding-bottom: 96px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .hero-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 48px;
+    }
+
+    .hero-content {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .hero-photo {
+      flex-shrink: 0;
+      width: 160px;
+      height: 160px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid var(--border);
+      filter: grayscale(20%);
+      transition: filter 0.3s;
+    }
+
+    .hero-photo:hover {
+      filter: grayscale(0%);
+    }
+
+    @media (max-width: 600px) {
+      .hero-inner {
+        flex-direction: column-reverse;
+        align-items: flex-start;
+        gap: 32px;
+      }
+
+      .hero-photo {
+        width: 120px;
+        height: 120px;
+      }
+    }
+
+    .hero-label {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--accent);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 24px;
+    }
+
+    .hero-name {
+      font-size: clamp(36px, 6vw, 56px);
+      font-weight: 600;
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+      margin-bottom: 16px;
+    }
+
+    .hero-title {
+      font-size: clamp(18px, 3vw, 24px);
+      font-weight: 300;
+      color: var(--muted);
+      margin-bottom: 32px;
+      letter-spacing: -0.01em;
+    }
+
+    .hero-tagline {
+      font-size: 15px;
+      color: var(--muted);
+      max-width: 480px;
+      margin-bottom: 48px;
+      line-height: 1.8;
+    }
+
+    .hero-links {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 20px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 500;
+      text-decoration: none;
+      transition: all 0.2s;
+      letter-spacing: 0.01em;
+    }
+
+    @keyframes shimmer {
+      from { background-position: 200% center; }
+      to   { background-position: -200% center; }
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      background-image: linear-gradient(105deg, var(--accent) 40%, rgba(255,255,255,0.3) 50%, var(--accent) 60%);
+      background-size: 200% auto;
+      color: #0a0a0a;
+    }
+
+    .btn-primary:hover {
+      animation: shimmer 0.65s linear;
+    }
+
+    .btn-ghost {
+      border: 1px solid var(--border);
+      color: var(--muted);
+    }
+
+    .btn-ghost:hover {
+      border-color: var(--muted);
+      color: var(--text);
+    }
+
+    /* ── Section headers ── */
+    .section-label {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--accent);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 40px;
+    }
+
+    .section-title {
+      font-size: 28px;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      margin-bottom: 20px;
+    }
+
+    /* ── About ── */
+    .about-text {
+      font-size: 15px;
+      color: var(--muted);
+      line-height: 1.9;
+      max-width: 600px;
+    }
+
+    .about-text + .about-text {
+      margin-top: 16px;
+    }
+
+    /* ── Stack ── */
+    .stack-groups {
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+
+    .stack-group-label {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--muted);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    .stack-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 10px;
+    }
+
+    .stack-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 14px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 13px;
+      font-family: var(--font-mono);
+      color: var(--muted);
+      transition: all 0.2s;
+    }
+
+    .stack-item:hover {
+      border-color: var(--accent);
+      color: var(--text);
+    }
+
+    .stack-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+      flex-shrink: 0;
+    }
+
+    /* ── Projects ── */
+    .projects-grid {
+      display: grid;
+      gap: 20px;
+    }
+
+    .project-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+
+    .project-card:hover {
+      border-color: var(--accent);
+      transform: translateY(-2px);
+    }
+
+    .project-preview {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      object-position: top;
+      display: block;
+      border-bottom: 1px solid var(--border);
+      transition: opacity 0.2s;
+    }
+
+    .project-card:hover .project-preview {
+      opacity: 0.9;
+    }
+
+    .project-body {
+      padding: 24px;
+    }
+
+    .project-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 10px;
+    }
+
+    .project-name {
+      font-size: 16px;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+    }
+
+    .project-links {
+      display: flex;
+      gap: 12px;
+      flex-shrink: 0;
+    }
+
+    .project-links a {
+      font-size: 12px;
+      font-family: var(--font-mono);
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .project-links a:hover {
+      color: var(--accent);
+    }
+
+    .project-desc {
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.8;
+      margin-bottom: 20px;
+    }
+
+    .project-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .tag {
+      padding: 3px 10px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      font-size: 11px;
+      font-family: var(--font-mono);
+      color: var(--muted);
+    }
+
+    /* ── Contact ── */
+    .contact-text {
+      font-size: 15px;
+      color: var(--muted);
+      max-width: 480px;
+      margin-bottom: 40px;
+      line-height: 1.9;
+    }
+
+    .contact-links {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .contact-link {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      font-size: 14px;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s;
+      width: fit-content;
+    }
+
+    .contact-link:hover {
+      color: var(--accent);
+    }
+
+    .contact-link-label {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      color: var(--border);
+      text-transform: uppercase;
+      min-width: 60px;
+    }
+
+    /* ── Footer ── */
+    footer {
+      padding: 40px 0;
+      border-top: 1px solid var(--border);
+    }
+
+    footer .container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .footer-text {
+      font-size: 12px;
+      font-family: var(--font-mono);
+      color: var(--muted);
+    }
+
+    /* ── Animations ── */
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(28px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes slideDown {
+      from { opacity: 0; transform: translateY(-16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+
+    @keyframes pulseDot {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50%       { transform: scale(0.6); opacity: 0.4; }
+    }
+
+    /* Nav load */
+    nav { animation: slideDown 0.5s 0.05s ease both; }
+
+    /* Hero stagger */
+    .hero-label   { animation: slideUp 0.65s 0.15s ease both; }
+    .hero-name    { animation: slideUp 0.65s 0.25s ease both; }
+    .hero-title   { animation: slideUp 0.65s 0.35s ease both; }
+    .hero-tagline { animation: slideUp 0.65s 0.45s ease both; }
+    .hero-links   { animation: slideUp 0.65s 0.55s ease both; }
+    .hero-photo   { animation: fadeIn  0.9s 0.2s  ease both; }
+
+    /* Scroll reveal */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.65s ease, transform 0.65s ease;
+    }
+
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Staggered children */
+    .stack-item,
+    .project-card {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.5s ease, transform 0.5s ease,
+                  border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .stack-item.visible,
+    .project-card.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .stack-item:hover .stack-dot {
+      animation: pulseDot 0.9s ease infinite;
+    }
+
+    /* Project card glow on hover */
+    .project-card:hover {
+      border-color: var(--accent);
+      transform: translateY(-4px);
+      box-shadow: 0 0 0 1px rgba(110, 231, 183, 0.15),
+                  0 12px 40px rgba(110, 231, 183, 0.06);
+    }
+
+    /* Scroll progress bar */
+    #scroll-progress {
+      position: fixed;
+      top: 0; left: 0;
+      height: 2px;
+      width: 0%;
+      background: var(--accent);
+      z-index: 200;
+      transition: width 0.08s linear;
+    }
+
+    /* Reduced motion */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-delay: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+    /* Cursor spotlight */
+    #cursor-glow {
+      position: fixed;
+      top: 0; left: 0;
+      width: 560px;
+      height: 560px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(110, 231, 183, 0.055) 0%, transparent 65%);
+      pointer-events: none;
+      transform: translate(-50%, -50%);
+      z-index: 0;
+      will-change: transform;
+      transition: opacity 0.4s;
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 600px) {
+      .nav-links {
+        gap: 20px;
+      }
+
+      .project-header {
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      footer .container {
+        flex-direction: column;
+        gap: 8px;
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="scroll-progress" aria-hidden="true"></div>
+  <div id="cursor-glow" aria-hidden="true"></div>
+
+  <!-- Nav -->
+  <nav>
+    <div class="container">
+      <a href="#hero" class="nav-logo">drew.cordano</a>
+      <ul class="nav-links">
+        <li><a href="#about">about</a></li>
+        <li><a href="#stack">stack</a></li>
+        <li><a href="#projects">projects</a></li>
+        <li><a href="#contact">contact</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section id="hero">
+    <div class="container">
+      <div class="hero-inner">
+        <div class="hero-content">
+          <p class="hero-label">let's connect</p>
+          <h1 class="hero-name">Drew Cordano</h1>
+          <p class="hero-title">Senior Software Engineer</p>
+          <p class="hero-tagline">
+            Building web and mobile products that help people and make a
+            real impact. I care about the work, not just the code.
+          </p>
+          <div class="hero-links">
+            <a href="#projects" class="btn btn-primary">View projects</a>
+            <a href="#contact" class="btn btn-ghost">Get in touch</a>
+            <a href="resume.pdf" target="_blank" rel="noopener" class="btn btn-ghost">Resume ↗</a>
+          </div>
+        </div>
+        <img src="avatar.png" alt="Drew Cordano" class="hero-photo" />
+      </div>
+    </div>
+  </section>
+
+  <!-- About -->
+  <section id="about">
+    <div class="container fade-in">
+      <p class="section-label">// about</p>
+      <p class="about-text">
+        I like building web and mobile apps that actually help people
+        and make a real difference in the world.
+      </p>
+      <p class="about-text">
+        If it solves a real problem, improves someone's day, or moves something
+        forward, that's the kind of work that matters to me.
+      </p>
+    </div>
+  </section>
+
+  <!-- Stack -->
+  <section id="stack">
+    <div class="container fade-in">
+      <p class="section-label">// stack</p>
+      <div class="stack-groups">
+
+        <div>
+          <p class="stack-group-label">Languages</p>
+          <div class="stack-grid">
+            <div class="stack-item"><span class="stack-dot"></span>TypeScript</div>
+            <div class="stack-item"><span class="stack-dot"></span>JavaScript</div>
+            <div class="stack-item"><span class="stack-dot"></span>HTML</div>
+            <div class="stack-item"><span class="stack-dot"></span>CSS / SCSS</div>
+          </div>
+        </div>
+
+        <div>
+          <p class="stack-group-label">CMS &amp; Web Builders</p>
+          <div class="stack-grid">
+            <div class="stack-item"><span class="stack-dot"></span>Squarespace</div>
+            <div class="stack-item"><span class="stack-dot"></span>Shopify</div>
+            <div class="stack-item"><span class="stack-dot"></span>WordPress</div>
+            <div class="stack-item"><span class="stack-dot"></span>Drupal</div>
+          </div>
+        </div>
+
+        <div>
+          <p class="stack-group-label">Frameworks &amp; Libraries</p>
+          <div class="stack-grid">
+            <div class="stack-item"><span class="stack-dot"></span>React</div>
+            <div class="stack-item"><span class="stack-dot"></span>React Native</div>
+            <div class="stack-item"><span class="stack-dot"></span>Redux</div>
+            <div class="stack-item"><span class="stack-dot"></span>Tailwind CSS</div>
+            <div class="stack-item"><span class="stack-dot"></span>REST APIs</div>
+          </div>
+        </div>
+
+        <div>
+          <p class="stack-group-label">Tools &amp; Build</p>
+          <div class="stack-grid">
+            <div class="stack-item"><span class="stack-dot"></span>Vite</div>
+            <div class="stack-item"><span class="stack-dot"></span>Webpack</div>
+            <div class="stack-item"><span class="stack-dot"></span>Storybook</div>
+            <div class="stack-item"><span class="stack-dot"></span>Git</div>
+          </div>
+        </div>
+
+        <div>
+          <p class="stack-group-label">Testing</p>
+          <div class="stack-grid">
+            <div class="stack-item"><span class="stack-dot"></span>Cypress</div>
+            <div class="stack-item"><span class="stack-dot"></span>Playwright</div>
+            <div class="stack-item"><span class="stack-dot"></span>RTL</div>
+            <div class="stack-item"><span class="stack-dot"></span>Jest</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Projects -->
+  <section id="projects">
+    <div class="container fade-in">
+      <p class="section-label">// live projects</p>
+      <div class="projects-grid">
+
+        <div class="project-card">
+          <img src="project-airtasker.png" alt="Airtasker" class="project-preview" />
+          <div class="project-body">
+            <div class="project-header">
+              <span class="project-name">Airtasker</span>
+              <div class="project-links">
+                <a href="https://www.airtasker.com.au" target="_blank" rel="noopener">Live ↗</a>
+              </div>
+            </div>
+            <p class="project-desc">
+              A leading Australian task marketplace connecting people who need work done
+              with skilled local taskers. Supports 1M+ customers and 2.5M+ completed tasks
+              across a wide range of categories.
+            </p>
+            <div class="project-tags">
+              <span class="tag">Marketplace</span>
+              <span class="tag">Platform</span>
+              <span class="tag">Australia</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="project-card">
+          <img src="project-oneflare.png" alt="Oneflare" class="project-preview" />
+          <div class="project-body">
+            <div class="project-header">
+              <span class="project-name">Oneflare</span>
+              <div class="project-links">
+                <a href="https://www.oneflare.com.au" target="_blank" rel="noopener">Live ↗</a>
+              </div>
+            </div>
+            <p class="project-desc">
+              An Airtasker company that connects Australians with qualified local service
+              providers. Customers describe what they need, and businesses compete to
+              offer the best quotesmaking hiring fast and stress-free.
+            </p>
+            <div class="project-tags">
+              <span class="tag">Services</span>
+              <span class="tag">Marketplace</span>
+              <span class="tag">Australia</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="project-card">
+          <img src="project-pursuited.png" alt="Pursuited" class="project-preview" />
+          <div class="project-body">
+            <div class="project-header">
+              <span class="project-name">Pursuited</span>
+              <div class="project-links">
+                <a href="https://www.pursuited.com" target="_blank" rel="noopener">Live ↗</a>
+              </div>
+            </div>
+            <p class="project-desc">
+              A smart job-matching platform that flips the hiring modelcandidates
+              get headhunted for their dream roles. Generate a profile in 60 seconds,
+              compare against the market, and receive secure, risk-free job offers.
+            </p>
+            <div class="project-tags">
+              <span class="tag">Recruiting</span>
+              <span class="tag">Platform</span>
+              <span class="tag">Job Market</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section id="contact">
+    <div class="container fade-in">
+      <p class="section-label">// contact</p>
+      <p class="contact-text">
+        Open to interesting problems. If you have something worth building,
+        let's talk.
+      </p>
+      <div class="contact-links">
+        <a href="mailto:drewberrysteph@gmail.com" class="contact-link">
+          <span class="contact-link-label">email</span>
+          drewberrysteph@gmail.com
+        </a>
+        <a href="https://github.com/Drewberrysteph" target="_blank" rel="noopener" class="contact-link">
+          <span class="contact-link-label">github</span>
+          github.com/Drewberrysteph
+        </a>
+        <a href="https://www.linkedin.com/in/drew-corda%C3%B1o-173b00164/" target="_blank" rel="noopener" class="contact-link">
+          <span class="contact-link-label">linkedin</span>
+          linkedin.com/in/drew-cordano
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <span class="footer-text">built by drew cordano</span>
+      <span class="footer-text">2026</span>
+    </div>
+  </footer>
+
+  <script>
+    // Scroll progress bar
+    const progress = document.getElementById('scroll-progress');
+    window.addEventListener('scroll', () => {
+      const scrolled = window.scrollY;
+      const total = document.documentElement.scrollHeight - window.innerHeight;
+      progress.style.width = (scrolled / total * 100) + '%';
+    }, { passive: true });
+
+    // Cursor spotlight
+    const glow = document.getElementById('cursor-glow');
+    let mx = window.innerWidth / 2, my = window.innerHeight / 2;
+    let cx = mx, cy = my;
+
+    document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+
+    (function raf() {
+      cx += (mx - cx) * 0.08;
+      cy += (my - cy) * 0.08;
+      glow.style.transform = `translate(${cx - 280}px, ${cy - 280}px)`;
+      requestAnimationFrame(raf);
+    })();
+
+    // Section fade-in
+    const fadeObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) entry.target.classList.add('visible');
+      });
+    }, { threshold: 0.08 });
+
+    document.querySelectorAll('.fade-in').forEach(el => fadeObserver.observe(el));
+
+    // Staggered children for stack items and project cards
+    const staggerObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const siblings = entry.target.parentElement.querySelectorAll(
+            '.stack-item, .project-card'
+          );
+          siblings.forEach((el, i) => {
+            setTimeout(() => el.classList.add('visible'), i * 70);
+          });
+          staggerObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.stack-grid, .projects-grid').forEach(grid => {
+      const first = grid.querySelector('.stack-item, .project-card');
+      if (first) staggerObserver.observe(first);
+    });
+
+    // Section label typewriter
+    const typeObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        const el = entry.target;
+        const full = el.textContent;
+        el.textContent = '';
+        el.style.opacity = '1';
+        let i = 0;
+        const tick = setInterval(() => {
+          el.textContent = full.slice(0, ++i);
+          if (i >= full.length) clearInterval(tick);
+        }, 40);
+        typeObserver.unobserve(el);
+      });
+    }, { threshold: 0.5 });
+
+    document.querySelectorAll('.section-label').forEach(el => {
+      el.style.opacity = '0';
+      typeObserver.observe(el);
+    });
+  </script>
+
+</body>
+</html>
