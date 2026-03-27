@@ -40,6 +40,11 @@
 
       body {
         background: var(--bg);
+        background-image: radial-gradient(
+          rgba(110, 231, 183, 0.04) 1px,
+          transparent 1px
+        );
+        background-size: 32px 32px;
         color: var(--text);
         font-family: var(--font-sans);
         font-size: 16px;
@@ -117,11 +122,13 @@
         transition: width 0.25s ease;
       }
 
-      .nav-links a:hover {
+      .nav-links a:hover,
+      .nav-links a.active {
         color: var(--text);
       }
 
-      .nav-links a:hover::after {
+      .nav-links a:hover::after,
+      .nav-links a.active::after {
         width: 100%;
       }
 
@@ -144,13 +151,54 @@
         min-width: 0;
       }
 
-      .hero-photo {
+      .hero-photo-wrapper {
         flex-shrink: 0;
+        position: relative;
+        width: 168px;
+        height: 168px;
+      }
+
+      .hero-photo-wrapper::before {
+        content: "";
+        position: absolute;
+        inset: -3px;
+        border-radius: 50%;
+        background: conic-gradient(
+          var(--accent),
+          transparent 60%,
+          var(--accent)
+        );
+        animation: rotateRing 4s linear infinite;
+        opacity: 0.6;
+        transition: opacity 0.3s;
+      }
+
+      .hero-photo-wrapper:hover::before {
+        opacity: 1;
+      }
+
+      .hero-photo-wrapper::after {
+        content: "";
+        position: absolute;
+        inset: 1px;
+        border-radius: 50%;
+        background: var(--bg);
+      }
+
+      @keyframes rotateRing {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      .hero-photo {
+        position: relative;
+        z-index: 1;
         width: 160px;
         height: 160px;
         border-radius: 50%;
         object-fit: cover;
-        border: 2px solid var(--border);
+        margin: 4px;
         filter: grayscale(20%);
         transition: filter 0.3s;
       }
@@ -164,6 +212,11 @@
           flex-direction: column-reverse;
           align-items: flex-start;
           gap: 32px;
+        }
+
+        .hero-photo-wrapper {
+          width: 128px;
+          height: 128px;
         }
 
         .hero-photo {
@@ -187,6 +240,7 @@
         letter-spacing: -0.03em;
         line-height: 1.1;
         margin-bottom: 16px;
+        cursor: default;
       }
 
       .hero-title {
@@ -642,7 +696,70 @@
         transform: translate(-50%, -50%);
         z-index: 0;
         will-change: transform;
-        transition: opacity 0.4s;
+        transition:
+          opacity 0.4s,
+          width 0.4s ease,
+          height 0.4s ease;
+      }
+
+      #cursor-glow.expanded {
+        width: 720px;
+        height: 720px;
+      }
+
+      /* Click ripple */
+      .click-ripple {
+        position: fixed;
+        border-radius: 50%;
+        border: 1px solid var(--accent);
+        pointer-events: none;
+        z-index: 150;
+        animation: rippleExpand 0.6s ease-out forwards;
+      }
+
+      @keyframes rippleExpand {
+        0% {
+          width: 0;
+          height: 0;
+          opacity: 0.6;
+          transform: translate(-50%, -50%) scale(0);
+        }
+        100% {
+          width: 120px;
+          height: 120px;
+          opacity: 0;
+          transform: translate(-50%, -50%) scale(1);
+        }
+      }
+
+      /* Cursor trail particles */
+      .cursor-particle {
+        position: fixed;
+        width: 4px;
+        height: 4px;
+        border-radius: 50%;
+        background: var(--accent);
+        pointer-events: none;
+        z-index: 150;
+        animation: particleFade 0.8s ease-out forwards;
+      }
+
+      @keyframes particleFade {
+        0% {
+          opacity: 0.5;
+          transform: scale(1);
+        }
+        100% {
+          opacity: 0;
+          transform: scale(0) translateY(-20px);
+        }
+      }
+
+      /* Magnetic button adjustments */
+      .btn {
+        transition:
+          all 0.2s,
+          transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
       }
 
       /* ── Responsive ── */
@@ -705,7 +822,9 @@
               >
             </div>
           </div>
-          <img src="avatar.png" alt="Drew Cordaño" class="hero-photo" />
+          <div class="hero-photo-wrapper">
+            <img src="avatar.png" alt="Drew Cordaño" class="hero-photo" />
+          </div>
         </div>
       </div>
     </section>
@@ -977,16 +1096,86 @@
         my = window.innerHeight / 2;
       let cx = mx,
         cy = my;
+      let isOverInteractive = false;
+
+      // Particle trail — spawns a dot every N pixels of movement
+      let lastParticleX = 0,
+        lastParticleY = 0;
+      const PARTICLE_DIST = 40;
+
+      function spawnParticle(x, y) {
+        const p = document.createElement("div");
+        p.className = "cursor-particle";
+        p.style.left = x + "px";
+        p.style.top = y + "px";
+        document.body.appendChild(p);
+        p.addEventListener("animationend", () => p.remove());
+      }
 
       document.addEventListener("mousemove", (e) => {
         mx = e.clientX;
         my = e.clientY;
+
+        // Spawn trail particles at intervals
+        const dx = mx - lastParticleX;
+        const dy = my - lastParticleY;
+        if (dx * dx + dy * dy > PARTICLE_DIST * PARTICLE_DIST) {
+          spawnParticle(mx, my);
+          lastParticleX = mx;
+          lastParticleY = my;
+        }
       });
 
+      // Glow expand when hovering interactive elements
+      const interactiveSelector = "a, .btn, .stack-item, .project-card";
+
+      document.addEventListener("mouseover", (e) => {
+        if (e.target.closest(interactiveSelector)) {
+          glow.classList.add("expanded");
+          isOverInteractive = true;
+        }
+      });
+
+      document.addEventListener("mouseout", (e) => {
+        if (e.target.closest(interactiveSelector)) {
+          glow.classList.remove("expanded");
+          isOverInteractive = false;
+        }
+      });
+
+      // Click ripple
+      document.addEventListener("click", (e) => {
+        const ripple = document.createElement("div");
+        ripple.className = "click-ripple";
+        ripple.style.left = e.clientX + "px";
+        ripple.style.top = e.clientY + "px";
+        document.body.appendChild(ripple);
+        ripple.addEventListener("animationend", () => ripple.remove());
+      });
+
+      // Magnetic pull on buttons
+      document.querySelectorAll(".btn").forEach((btn) => {
+        btn.addEventListener("mousemove", (e) => {
+          const rect = btn.getBoundingClientRect();
+          const bx = rect.left + rect.width / 2;
+          const by = rect.top + rect.height / 2;
+          const dx = (e.clientX - bx) * 0.25;
+          const dy = (e.clientY - by) * 0.25;
+          btn.style.transform = `translate(${dx}px, ${dy}px)`;
+        });
+
+        btn.addEventListener("mouseleave", () => {
+          btn.style.transform = "translate(0, 0)";
+        });
+      });
+
+      // Smooth cursor follow
       (function raf() {
-        cx += (mx - cx) * 0.08;
-        cy += (my - cy) * 0.08;
-        glow.style.transform = `translate(${cx - 280}px, ${cy - 280}px)`;
+        const speed = isOverInteractive ? 0.12 : 0.08;
+        cx += (mx - cx) * speed;
+        cy += (my - cy) * speed;
+        const half = isOverInteractive ? 360 : 280;
+        glow.style.transform = `translate(${cx - half}px, ${cy - half}px)`;
         requestAnimationFrame(raf);
       })();
 
@@ -1052,6 +1241,63 @@
       document.querySelectorAll(".section-label").forEach((el) => {
         el.style.opacity = "0";
         typeObserver.observe(el);
+      });
+
+      // Active nav highlighting on scroll
+      const sections = document.querySelectorAll("section[id]");
+      const navLinks = document.querySelectorAll(".nav-links a");
+
+      const navObserver = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              const id = entry.target.id;
+              navLinks.forEach((link) => {
+                link.classList.toggle(
+                  "active",
+                  link.getAttribute("href") === `#${id}`,
+                );
+              });
+            }
+          });
+        },
+        { threshold: 0.3, rootMargin: "-80px 0px -40% 0px" },
+      );
+
+      sections.forEach((s) => navObserver.observe(s));
+
+      // Hero name text scramble on hover
+      const heroName = document.querySelector(".hero-name");
+      const originalText = heroName.textContent;
+      const chars = "!@#$%^&*()_+-=[]{}|;:,.<>?/~`0123456789";
+      let scrambleRAF;
+
+      heroName.addEventListener("mouseenter", () => {
+        let iteration = 0;
+        cancelAnimationFrame(scrambleRAF);
+
+        function step() {
+          heroName.textContent = originalText
+            .split("")
+            .map((char, i) => {
+              if (char === " ") return " ";
+              if (i < iteration) return originalText[i];
+              return chars[Math.floor(Math.random() * chars.length)];
+            })
+            .join("");
+
+          if (iteration < originalText.length) {
+            iteration += 0.6;
+            scrambleRAF = requestAnimationFrame(step);
+          }
+        }
+
+        step();
+      });
+
+      heroName.addEventListener("mouseleave", () => {
+        cancelAnimationFrame(scrambleRAF);
+        heroName.textContent = originalText;
       });
     </script>
   </body>
