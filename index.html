@@ -160,54 +160,29 @@
         height: 168px;
       }
 
-      .hero-photo-wrapper::before {
-        content: "";
-        position: absolute;
-        inset: -3px;
+      .hero-photo-wrapper {
+        display: flex;
+        align-items: center;
+        justify-content: center;
         border-radius: 50%;
-        background: conic-gradient(
-          var(--accent),
-          transparent 60%,
-          var(--accent)
-        );
-        animation: rotateRing 4s linear infinite;
-        opacity: 0.6;
-        transition: opacity 0.3s;
-      }
-
-      .hero-photo-wrapper:hover::before {
-        opacity: 1;
-      }
-
-      .hero-photo-wrapper::after {
-        content: "";
-        position: absolute;
-        inset: 1px;
-        border-radius: 50%;
-        background: var(--bg);
-      }
-
-      @keyframes rotateRing {
-        to {
-          transform: rotate(360deg);
-        }
+        background: var(--surface);
+        border: 2px solid rgba(110, 231, 183, 0.35);
+        padding: 6px;
+        box-shadow:
+          0 0 0 1px rgba(110, 231, 183, 0.1),
+          0 4px 24px rgba(0, 0, 0, 0.4),
+          0 0 50px rgba(110, 231, 183, 0.06),
+          inset 0 0 20px rgba(110, 231, 183, 0.03);
       }
 
       .hero-photo {
         position: relative;
         z-index: 1;
-        width: 160px;
-        height: 160px;
+        width: 154px;
+        height: 154px;
         border-radius: 50%;
         object-fit: cover;
-        margin: 4px;
-        filter: grayscale(20%);
-        transition: filter 0.3s;
-      }
-
-
-      .hero-photo:hover {
-        filter: grayscale(0%);
+        filter: brightness(1.05);
       }
 
       @media (max-width: 600px) {
@@ -409,8 +384,9 @@
         border-radius: 12px;
         overflow: hidden;
         transition:
-          border-color 0.2s,
-          transform 0.2s;
+          border-color 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+          transform 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+          box-shadow 0.4s cubic-bezier(0.22, 1, 0.36, 1);
       }
 
       .project-card:hover {
@@ -638,15 +614,18 @@
         transform: translateY(20px);
         transition:
           opacity 0.5s ease,
-          transform 0.5s ease,
-          border-color 0.2s,
-          box-shadow 0.2s;
+          transform 0.5s ease;
       }
 
       .stack-item.visible,
       .project-card.visible {
         opacity: 1;
         transform: translateY(0);
+        transition:
+          opacity 0.5s ease,
+          transform 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+          border-color 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+          box-shadow 0.4s cubic-bezier(0.22, 1, 0.36, 1);
       }
 
       .stack-item:hover .stack-dot {
@@ -715,6 +694,8 @@
           0 0 20px rgba(110, 231, 183, 0.02),
           inset 0 0 20px rgba(110, 231, 183, 0.01);
         cursor: default;
+        overflow: hidden;
+        min-width: 0;
       }
 
       .holo-panel:hover {
@@ -782,6 +763,7 @@
         gap: 8px;
         line-height: 1.8;
         white-space: nowrap;
+        overflow: hidden;
       }
 
       .holo-line-num {
@@ -841,6 +823,8 @@
         align-items: center;
         gap: 8px;
         line-height: 2;
+        white-space: nowrap;
+        overflow: hidden;
       }
 
       .holo-git-dot {
@@ -859,6 +843,7 @@
       .holo-terminal-line {
         line-height: 2;
         white-space: nowrap;
+        overflow: hidden;
       }
 
       .holo-prompt {
@@ -913,6 +898,19 @@
       /* Responsive: hide on small screens */
       @media (max-width: 768px) {
         #holo-bg { display: none; }
+      }
+
+      /* Scroll focus highlight */
+      .scroll-focus {
+        opacity: 0.2;
+        transition: opacity 0.4s ease, text-shadow 0.4s ease, filter 0.4s ease;
+        filter: blur(0.5px);
+      }
+
+      .scroll-focus.in-focus {
+        opacity: 1;
+        filter: blur(0);
+        text-shadow: 0 0 30px rgba(110, 231, 183, 0.15);
       }
 
       /* Reduced motion */
@@ -1035,8 +1033,8 @@
     <!-- Holographic Dashboard Background -->
     <div id="holo-bg" aria-hidden="true">
 
-      <!-- Panel 1: React + TypeScript Component (left) -->
-      <div class="holo-panel" data-speed="0.02" style="top: 8%; left: -2%; width: 2280px; transform: rotateY(18deg) rotateX(-2deg);">
+      <!-- Panel 1: React + TypeScript Component (top-left) -->
+      <div class="holo-panel" data-speed="0.02" style="top: 2%; left: -12%; width: 480px; transform: rotateY(18deg) rotateX(-2deg);">
         <div class="scan-line"></div>
         <div class="panel-title">Dashboard.tsx &mdash; react</div>
         <div class="holo-code-line"><span class="holo-line-num">1</span><span class="holo-keyword">import</span> <span class="holo-type">React</span>, { <span class="holo-func">useState</span> } <span class="holo-keyword">from</span> <span class="holo-string">'react'</span></div>
@@ -1068,8 +1066,81 @@
         <div class="holo-code-line"><span class="holo-line-num">27</span>}</div>
       </div>
 
-      <!-- Panel 4: CI/CD + Build Output (bottom) -->
-      <div class="holo-panel" data-speed="0.035" style="top: 52%; right: -1%; width: 2160px; transform: rotateY(-16deg) rotateX(-2deg);">
+      <!-- Panel 2: TypeScript Types (top-right) -->
+      <div class="holo-panel" data-speed="0.025" style="top: 12%; right: -6%; width: 460px; transform: rotateY(-18deg) rotateX(2deg);">
+        <div class="scan-line" style="animation-delay: -1.5s;"></div>
+        <div class="panel-title">types.ts &mdash; typescript</div>
+        <div class="holo-code-line"><span class="holo-line-num">1</span><span class="holo-keyword">type</span> <span class="holo-type">Status</span> = <span class="holo-string">'idle'</span> | <span class="holo-string">'loading'</span> | <span class="holo-string">'success'</span> | <span class="holo-string">'error'</span></div>
+        <div class="holo-code-line"><span class="holo-line-num">2</span></div>
+        <div class="holo-code-line"><span class="holo-line-num">3</span><span class="holo-keyword">interface</span> <span class="holo-type">ApiResponse</span>&lt;<span class="holo-type">T</span>&gt; {</div>
+        <div class="holo-code-line"><span class="holo-line-num">4</span>&nbsp;&nbsp;data: <span class="holo-type">T</span>[]</div>
+        <div class="holo-code-line"><span class="holo-line-num">5</span>&nbsp;&nbsp;meta: { total: <span class="holo-type">number</span>; page: <span class="holo-type">number</span> }</div>
+        <div class="holo-code-line"><span class="holo-line-num">6</span>&nbsp;&nbsp;status: <span class="holo-type">Status</span></div>
+        <div class="holo-code-line"><span class="holo-line-num">7</span>}</div>
+        <div class="holo-code-line"><span class="holo-line-num">8</span></div>
+        <div class="holo-code-line"><span class="holo-line-num">9</span><span class="holo-keyword">interface</span> <span class="holo-type">User</span> {</div>
+        <div class="holo-code-line"><span class="holo-line-num">10</span>&nbsp;&nbsp;id: <span class="holo-type">string</span></div>
+        <div class="holo-code-line"><span class="holo-line-num">11</span>&nbsp;&nbsp;email: <span class="holo-type">string</span></div>
+        <div class="holo-code-line"><span class="holo-line-num">12</span>&nbsp;&nbsp;role: <span class="holo-string">'admin'</span> | <span class="holo-string">'user'</span> | <span class="holo-string">'viewer'</span></div>
+        <div class="holo-code-line"><span class="holo-line-num">13</span>&nbsp;&nbsp;preferences: <span class="holo-type">Record</span>&lt;<span class="holo-type">string</span>, <span class="holo-type">unknown</span>&gt;</div>
+        <div class="holo-code-line"><span class="holo-line-num">14</span>}</div>
+        <div class="holo-code-line"><span class="holo-line-num">15</span></div>
+        <div class="holo-code-line"><span class="holo-line-num">16</span><span class="holo-keyword">type</span> <span class="holo-type">DeepPartial</span>&lt;<span class="holo-type">T</span>&gt; = {</div>
+        <div class="holo-code-line"><span class="holo-line-num">17</span>&nbsp;&nbsp;[<span class="holo-type">K</span> <span class="holo-keyword">in keyof</span> <span class="holo-type">T</span>]?: <span class="holo-type">T</span>[<span class="holo-type">K</span>] <span class="holo-keyword">extends</span> <span class="holo-type">object</span></div>
+        <div class="holo-code-line"><span class="holo-line-num">18</span>&nbsp;&nbsp;&nbsp;&nbsp;? <span class="holo-type">DeepPartial</span>&lt;<span class="holo-type">T</span>[<span class="holo-type">K</span>]&gt;</div>
+        <div class="holo-code-line"><span class="holo-line-num">19</span>&nbsp;&nbsp;&nbsp;&nbsp;: <span class="holo-type">T</span>[<span class="holo-type">K</span>]</div>
+        <div class="holo-code-line"><span class="holo-line-num">20</span>}</div>
+      </div>
+
+      <!-- Panel 3: Playwright + Cypress Tests (bottom-right) -->
+      <div class="holo-panel" data-speed="0.04" style="top: 85%; right: -5%; width: 440px; transform: rotateY(-16deg) rotateX(1deg);">
+        <div class="scan-line" style="animation-delay: -2.8s;"></div>
+        <div class="panel-title">e2e.spec.ts &mdash; playwright + cypress</div>
+        <div class="holo-code-line"><span class="holo-line-num">1</span><span class="holo-keyword">import</span> { <span class="holo-func">test</span>, <span class="holo-func">expect</span> } <span class="holo-keyword">from</span> <span class="holo-string">'@playwright/test'</span></div>
+        <div class="holo-code-line"><span class="holo-line-num">2</span></div>
+        <div class="holo-code-line"><span class="holo-line-num">3</span><span class="holo-func">test</span>(<span class="holo-string">'dashboard loads metrics'</span>, <span class="holo-keyword">async</span> ({ page }) => {</div>
+        <div class="holo-code-line"><span class="holo-line-num">4</span>&nbsp;&nbsp;<span class="holo-keyword">await</span> page.<span class="holo-func">goto</span>(<span class="holo-string">'/dashboard'</span>)</div>
+        <div class="holo-code-line"><span class="holo-line-num">5</span>&nbsp;&nbsp;<span class="holo-keyword">await</span> <span class="holo-func">expect</span>(page.<span class="holo-func">getByRole</span>(<span class="holo-string">'heading'</span>)).<span class="holo-func">toBeVisible</span>()</div>
+        <div class="holo-code-line"><span class="holo-line-num">6</span>&nbsp;&nbsp;<span class="holo-keyword">await</span> <span class="holo-func">expect</span>(page.<span class="holo-func">locator</span>(<span class="holo-string">'.metric-card'</span>)).<span class="holo-func">toHaveCount</span>(4)</div>
+        <div class="holo-code-line"><span class="holo-line-num">7</span>})</div>
+        <div class="holo-code-line"><span class="holo-line-num">8</span></div>
+        <div class="holo-code-line"><span class="holo-line-num">9</span><span class="holo-comment">// cypress/e2e/auth.cy.ts</span></div>
+        <div class="holo-code-line"><span class="holo-line-num">10</span><span class="holo-func">describe</span>(<span class="holo-string">'Auth Flow'</span>, () => {</div>
+        <div class="holo-code-line"><span class="holo-line-num">11</span>&nbsp;&nbsp;<span class="holo-func">it</span>(<span class="holo-string">'redirects unauthenticated users'</span>, () => {</div>
+        <div class="holo-code-line"><span class="holo-line-num">12</span>&nbsp;&nbsp;&nbsp;&nbsp;cy.<span class="holo-func">visit</span>(<span class="holo-string">'/admin'</span>)</div>
+        <div class="holo-code-line"><span class="holo-line-num">13</span>&nbsp;&nbsp;&nbsp;&nbsp;cy.<span class="holo-func">url</span>().<span class="holo-func">should</span>(<span class="holo-string">'include'</span>, <span class="holo-string">'/login'</span>)</div>
+        <div class="holo-code-line"><span class="holo-line-num">14</span>&nbsp;&nbsp;})</div>
+        <div class="holo-code-line"><span class="holo-line-num">15</span>})</div>
+      </div>
+
+      <!-- Panel 4: Performance Metrics (mid-right) -->
+      <div class="holo-panel" data-speed="0.03" style="top: 42%; right: -4%; width: 440px; transform: rotateY(-15deg) rotateX(-1deg);">
+        <div class="scan-line" style="animation-delay: -3.5s;"></div>
+        <div class="panel-title">performance &mdash; web vitals</div>
+        <div class="holo-metric"><span>LCP</span><span class="holo-metric-value" style="color: rgba(74,222,128,0.4);">1.2s</span></div>
+        <div class="holo-metric"><span>FID</span><span class="holo-metric-value" style="color: rgba(74,222,128,0.4);">8ms</span></div>
+        <div class="holo-metric"><span>CLS</span><span class="holo-metric-value" style="color: rgba(74,222,128,0.4);">0.02</span></div>
+        <div class="holo-metric"><span>TTFB</span><span class="holo-metric-value" style="color: rgba(74,222,128,0.4);">180ms</span></div>
+        <div class="holo-metric"><span>INP</span><span class="holo-metric-value" style="color: rgba(74,222,128,0.4);">45ms</span></div>
+        <div class="holo-bar-chart" style="height: 55px;">
+          <div class="holo-bar" style="height: 95%; animation-delay: 0.1s;"></div>
+          <div class="holo-bar" style="height: 88%; animation-delay: 0.2s;"></div>
+          <div class="holo-bar" style="height: 92%; animation-delay: 0.3s;"></div>
+          <div class="holo-bar" style="height: 78%; animation-delay: 0.4s;"></div>
+          <div class="holo-bar" style="height: 96%; animation-delay: 0.5s;"></div>
+          <div class="holo-bar" style="height: 85%; animation-delay: 0.6s;"></div>
+          <div class="holo-bar" style="height: 100%; animation-delay: 0.7s;"></div>
+          <div class="holo-bar" style="height: 90%; animation-delay: 0.8s;"></div>
+          <div class="holo-bar" style="height: 72%; animation-delay: 0.9s;"></div>
+          <div class="holo-bar" style="height: 98%; animation-delay: 1.0s;"></div>
+        </div>
+        <div class="holo-metric" style="margin-top: 8px;"><span>lighthouse</span><span class="holo-metric-value">98</span></div>
+        <div class="holo-metric"><span>bundle size</span><span class="holo-metric-value">142kb gzip</span></div>
+        <div class="holo-metric"><span>tree-shaken</span><span class="holo-metric-value" style="color: rgba(74,222,128,0.4);">62%</span></div>
+      </div>
+
+      <!-- Panel 5: CI/CD + Build Output (bottom-left) -->
+      <div class="holo-panel" data-speed="0.035" style="top: 65%; left: -12%; width: 460px; transform: rotateY(14deg) rotateX(-2deg);">
         <div class="scan-line" style="animation-delay: -0.7s;"></div>
         <div class="panel-title">github actions &mdash; ci/cd pipeline</div>
         <div class="holo-terminal-line"><span style="color:rgba(74,222,128,0.35);">&#10003;</span> npm ci <span class="holo-output" style="float:right;">12s</span></div>
@@ -1452,21 +1523,6 @@
         ripple.addEventListener("animationend", () => ripple.remove());
       });
 
-      // Magnetic pull on buttons
-      document.querySelectorAll(".btn").forEach((btn) => {
-        btn.addEventListener("mousemove", (e) => {
-          const rect = btn.getBoundingClientRect();
-          const bx = rect.left + rect.width / 2;
-          const by = rect.top + rect.height / 2;
-          const dx = (e.clientX - bx) * 0.25;
-          const dy = (e.clientY - by) * 0.25;
-          btn.style.transform = `translate(${dx}px, ${dy}px)`;
-        });
-
-        btn.addEventListener("mouseleave", () => {
-          btn.style.transform = "translate(0, 0)";
-        });
-      });
 
       // Smooth cursor follow
       (function raf() {
@@ -1565,39 +1621,6 @@
 
       sections.forEach((s) => navObserver.observe(s));
 
-      // Hero name text scramble on hover
-      const heroName = document.querySelector(".hero-name");
-      const originalText = heroName.textContent;
-      const chars = "!@#$%^&*()_+-=[]{}|;:,.<>?/~`0123456789";
-      let scrambleRAF;
-
-      heroName.addEventListener("mouseenter", () => {
-        let iteration = 0;
-        cancelAnimationFrame(scrambleRAF);
-
-        function step() {
-          heroName.textContent = originalText
-            .split("")
-            .map((char, i) => {
-              if (char === " ") return " ";
-              if (i < iteration) return originalText[i];
-              return chars[Math.floor(Math.random() * chars.length)];
-            })
-            .join("");
-
-          if (iteration < originalText.length) {
-            iteration += 0.6;
-            scrambleRAF = requestAnimationFrame(step);
-          }
-        }
-
-        step();
-      });
-
-      heroName.addEventListener("mouseleave", () => {
-        cancelAnimationFrame(scrambleRAF);
-        heroName.textContent = originalText;
-      });
 
       // ── Holographic Background: 3D parallax + floating ──
       const holoPanels = document.querySelectorAll('.holo-panel');
@@ -1605,6 +1628,7 @@
 
       // Store base transforms and assign random float params
       holoPanels.forEach((panel, i) => {
+        const angle = Math.random() * Math.PI * 2; // random direction per panel
         holoData[i] = {
           baseTransform: panel.style.transform || '',
           baseOpacity: parseFloat(panel.style.opacity) || 1,
@@ -1613,7 +1637,8 @@
           ampX: 2 + Math.random() * 5,
           freq: 0.0004 + Math.random() * 0.0006,
           speed: parseFloat(panel.dataset.speed) || 0.03,
-          side: panel.style.left ? 1 : -1 // left panels drift right, right panels drift left
+          dirX: Math.cos(angle),
+          dirY: Math.sin(angle)
         };
       });
 
@@ -1630,12 +1655,12 @@
           const floatY = Math.sin(now * d.freq + d.phase) * d.ampY;
           const floatX = Math.cos(now * d.freq * 0.7 + d.phase) * d.ampX;
 
-          // Subtle parallax: small Y shift + slight horizontal drift on scroll
-          const parallaxY = scrollY * d.speed * -0.8;
-          const parallaxX = scrollY * d.speed * 0.3 * d.side;
+          // Parallax drift in each panel's own random direction
+          const parallaxX = scrollY * d.speed * d.dirX;
+          const parallaxY = scrollY * d.speed * d.dirY;
 
           // Slight 3D rotation shift based on scroll for depth effect
-          const rotShift = scrollRatio * 4 * d.side;
+          const rotShift = scrollRatio * 4 * d.dirX;
 
           panel.style.transform = `${d.baseTransform} translate3d(${floatX + parallaxX}px, ${floatY + parallaxY}px, 0px) rotateY(${rotShift}deg)`;
         });
@@ -1644,6 +1669,25 @@
       }
 
       requestAnimationFrame(updateHoloPanels);
+
+      // ── Scroll Focus Highlight ──
+      const focusEls = document.querySelectorAll(
+        '.hero-name, .hero-title, .hero-tagline, .hero-label, .section-label, .about-text, .project-name, .project-desc, .stack-item, .project-card'
+      );
+      focusEls.forEach(el => el.classList.add('scroll-focus'));
+
+      function updateScrollFocus() {
+        const center = window.innerHeight / 2;
+        focusEls.forEach(el => {
+          const rect = el.getBoundingClientRect();
+          const elCenter = rect.top + rect.height / 2;
+          const dist = Math.abs(elCenter - center);
+          el.classList.toggle('in-focus', dist < window.innerHeight * 0.45);
+        });
+      }
+
+      window.addEventListener('scroll', updateScrollFocus, { passive: true });
+      updateScrollFocus();
     </script>
   </body>
 </html>
