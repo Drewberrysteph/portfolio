@@ -372,16 +372,19 @@
         flex-shrink: 0;
       }
 
-      /* ── Projects ── */
+      /* ── Projects — Bento Grid ── */
       .projects-grid {
         display: grid;
-        gap: 20px;
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: auto auto;
+        gap: 16px;
       }
 
       .project-card {
+        position: relative;
         background: var(--surface);
         border: 1px solid var(--border);
-        border-radius: 12px;
+        border-radius: 16px;
         overflow: hidden;
         transition:
           border-color 0.4s cubic-bezier(0.22, 1, 0.36, 1),
@@ -391,57 +394,72 @@
 
       .project-card:hover {
         border-color: var(--accent);
-        transform: translateY(-2px);
+        transform: translateY(-4px);
+        box-shadow: 0 8px 40px rgba(110, 231, 183, 0.06);
+      }
+
+      /* Featured project spans full width */
+      .project-card.featured {
+        grid-column: 1 / -1;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        min-height: 320px;
+      }
+
+      .project-card.featured .project-preview {
+        height: 100%;
+        border-bottom: none;
+        border-right: 1px solid var(--border);
       }
 
       .project-preview {
         width: 100%;
-        height: 200px;
+        height: 220px;
         object-fit: cover;
         object-position: top;
         display: block;
         border-bottom: 1px solid var(--border);
-        transition: opacity 0.2s;
+        transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
       }
 
       .project-card:hover .project-preview {
-        opacity: 0.9;
+        transform: scale(1.03);
       }
 
       .project-body {
-        padding: 24px;
+        padding: 28px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
       }
 
-      .project-header {
-        display: flex;
-        align-items: flex-start;
-        justify-content: space-between;
-        gap: 16px;
-        margin-bottom: 10px;
+      .project-number {
+        font-family: var(--font-mono);
+        font-size: 11px;
+        color: var(--accent);
+        letter-spacing: 0.08em;
+        margin-bottom: 12px;
+        opacity: 0.6;
       }
 
       .project-name {
-        font-size: 16px;
+        font-size: 20px;
         font-weight: 600;
-        letter-spacing: -0.01em;
+        letter-spacing: -0.02em;
+        margin-bottom: 8px;
       }
 
-      .project-links {
-        display: flex;
-        gap: 12px;
-        flex-shrink: 0;
+      .project-card.featured .project-name {
+        font-size: 24px;
       }
 
-      .project-links a {
-        font-size: 12px;
+      .project-role {
         font-family: var(--font-mono);
-        color: var(--muted);
-        text-decoration: none;
-        transition: color 0.2s;
-      }
-
-      .project-links a:hover {
+        font-size: 11px;
         color: var(--accent);
+        letter-spacing: 0.04em;
+        margin-bottom: 14px;
+        opacity: 0.7;
       }
 
       .project-desc {
@@ -455,16 +473,57 @@
         display: flex;
         flex-wrap: wrap;
         gap: 8px;
+        margin-bottom: 20px;
       }
 
       .tag {
-        padding: 3px 10px;
+        padding: 4px 12px;
         background: var(--bg);
         border: 1px solid var(--border);
-        border-radius: 4px;
+        border-radius: 100px;
         font-size: 11px;
         font-family: var(--font-mono);
         color: var(--muted);
+        transition: border-color 0.3s ease, color 0.3s ease;
+      }
+
+      .project-card:hover .tag {
+        border-color: rgba(110, 231, 183, 0.15);
+      }
+
+      .project-links {
+        display: flex;
+        gap: 16px;
+        margin-top: auto;
+      }
+
+      .project-links a {
+        font-size: 12px;
+        font-family: var(--font-mono);
+        color: var(--muted);
+        text-decoration: none;
+        transition: color 0.2s;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+      }
+
+      .project-links a:hover {
+        color: var(--accent);
+      }
+
+      /* Arrow animation on card hover */
+      .project-arrow {
+        display: inline-block;
+        transition: transform 0.3s ease;
+      }
+
+      .project-card:hover .project-arrow {
+        transform: translate(3px, -3px);
+      }
+
+      .project-card[data-href] {
+        cursor: pointer;
       }
 
       /* ── Contact ── */
@@ -674,7 +733,7 @@
       }
 
       #holo-bg .holo-panel {
-        pointer-events: auto;
+        pointer-events: none;
       }
 
       .holo-panel {
@@ -693,20 +752,11 @@
         box-shadow:
           0 0 20px rgba(110, 231, 183, 0.02),
           inset 0 0 20px rgba(110, 231, 183, 0.01);
-        cursor: default;
         overflow: hidden;
         min-width: 0;
       }
 
-      .holo-panel:hover {
-        background: rgba(110, 231, 183, 0.07);
-        border-color: rgba(110, 231, 183, 0.25);
-        color: rgba(110, 231, 183, 0.5);
-        box-shadow:
-          0 0 40px rgba(110, 231, 183, 0.08),
-          0 0 80px rgba(110, 231, 183, 0.04),
-          inset 0 0 30px rgba(110, 231, 183, 0.03);
-      }
+
 
       .holo-panel::before {
         content: '';
@@ -934,81 +984,7 @@
         }
       }
 
-      /* Cursor spotlight */
-      #cursor-glow {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 560px;
-        height: 560px;
-        border-radius: 50%;
-        background: radial-gradient(
-          circle,
-          rgba(110, 231, 183, 0.055) 0%,
-          transparent 65%
-        );
-        pointer-events: none;
-        transform: translate(-50%, -50%);
-        z-index: 0;
-        will-change: transform;
-        transition:
-          opacity 0.4s,
-          width 0.4s ease,
-          height 0.4s ease;
-      }
 
-      #cursor-glow.expanded {
-        width: 720px;
-        height: 720px;
-      }
-
-      /* Click ripple */
-      .click-ripple {
-        position: fixed;
-        border-radius: 50%;
-        border: 1px solid var(--accent);
-        pointer-events: none;
-        z-index: 150;
-        animation: rippleExpand 0.6s ease-out forwards;
-      }
-
-      @keyframes rippleExpand {
-        0% {
-          width: 0;
-          height: 0;
-          opacity: 0.6;
-          transform: translate(-50%, -50%) scale(0);
-        }
-        100% {
-          width: 120px;
-          height: 120px;
-          opacity: 0;
-          transform: translate(-50%, -50%) scale(1);
-        }
-      }
-
-      /* Cursor trail particles */
-      .cursor-particle {
-        position: fixed;
-        width: 4px;
-        height: 4px;
-        border-radius: 50%;
-        background: var(--accent);
-        pointer-events: none;
-        z-index: 150;
-        animation: particleFade 0.8s ease-out forwards;
-      }
-
-      @keyframes particleFade {
-        0% {
-          opacity: 0.5;
-          transform: scale(1);
-        }
-        100% {
-          opacity: 0;
-          transform: scale(0) translateY(-20px);
-        }
-      }
 
       /* Magnetic button adjustments */
       .btn {
@@ -1019,26 +995,35 @@
 
       /* ── Responsive ── */
       @media (max-width: 768px) {
+        .projects-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .project-card.featured {
+          grid-template-columns: 1fr;
+          min-height: auto;
+        }
+
+        .project-card.featured .project-preview {
+          height: 200px;
+          border-right: none;
+          border-bottom: 1px solid var(--border);
+        }
+
         .project-preview {
-          height: 160px;
+          height: 180px;
         }
 
         .project-body {
-          padding: 18px;
+          padding: 22px;
         }
 
         .project-name {
-          font-size: 15px;
+          font-size: 18px;
         }
 
-        .project-desc {
-          font-size: 13px;
-          margin-bottom: 14px;
-        }
-
-        .tag {
-          font-size: 10px;
-          padding: 2px 8px;
+        .project-card.featured .project-name {
+          font-size: 20px;
         }
       }
 
@@ -1047,40 +1032,30 @@
           gap: 20px;
         }
 
-        .project-header {
-          flex-direction: column;
-          gap: 8px;
-        }
-
         .project-preview {
-          height: 130px;
+          height: 150px;
         }
 
         .project-body {
-          padding: 14px;
+          padding: 18px;
         }
 
         .project-name {
-          font-size: 14px;
+          font-size: 16px;
+        }
+
+        .project-card.featured .project-name {
+          font-size: 18px;
         }
 
         .project-desc {
-          font-size: 12px;
-          line-height: 1.6;
-          margin-bottom: 12px;
-        }
-
-        .project-tags {
-          gap: 6px;
+          font-size: 13px;
+          line-height: 1.7;
         }
 
         .tag {
-          font-size: 9.5px;
-          padding: 2px 7px;
-        }
-
-        .carousel-controls {
-          margin-top: 16px;
+          font-size: 10px;
+          padding: 3px 10px;
         }
 
         footer .container {
@@ -1093,7 +1068,6 @@
   </head>
   <body>
     <div id="scroll-progress" aria-hidden="true"></div>
-    <div id="cursor-glow" aria-hidden="true"></div>
 
     <!-- Holographic Dashboard Background -->
     <div id="holo-bg" aria-hidden="true">
@@ -1370,24 +1344,13 @@
       <div class="container fade-in">
         <p class="section-label">// recent projects</p>
         <div class="projects-grid">
-          <div class="project-card">
-            <img
-              src="project-airtasker.png"
-              alt="Airtasker"
-              class="project-preview"
-            />
+
+          <!-- Featured -->
+          <div class="project-card featured" data-href="https://www.airtasker.com.au">
+            <img src="project-airtasker.png" alt="Airtasker" class="project-preview" />
             <div class="project-body">
-              <div class="project-header">
-                <span class="project-name">Airtasker</span>
-                <div class="project-links">
-                  <a
-                    href="https://www.airtasker.com.au"
-                    target="_blank"
-                    rel="noopener"
-                    >Live ↗</a
-                  >
-                </div>
-              </div>
+              <span class="project-number">01</span>
+              <span class="project-name">Airtasker</span>
               <p class="project-desc">
                 A leading Australian task marketplace connecting people who need
                 work done with skilled local taskers. Supports 1M+ customers and
@@ -1396,74 +1359,58 @@
               <div class="project-tags">
                 <span class="tag">Marketplace</span>
                 <span class="tag">Platform</span>
-                <span class="tag">Australia</span>
+                <span class="tag">React</span>
+                <span class="tag">TypeScript</span>
+              </div>
+              <div class="project-links">
+                <a href="https://www.airtasker.com.au" target="_blank" rel="noopener">Visit site <span class="project-arrow">↗</span></a>
               </div>
             </div>
           </div>
 
-          <div class="project-card">
-            <img
-              src="project-oneflare.png"
-              alt="Oneflare"
-              class="project-preview"
-            />
+          <!-- Card 2 -->
+          <div class="project-card" data-href="https://www.oneflare.com.au">
+            <img src="project-oneflare.png" alt="Oneflare" class="project-preview" />
             <div class="project-body">
-              <div class="project-header">
-                <span class="project-name">Oneflare</span>
-                <div class="project-links">
-                  <a
-                    href="https://www.oneflare.com.au"
-                    target="_blank"
-                    rel="noopener"
-                    >Live ↗</a
-                  >
-                </div>
-              </div>
+              <span class="project-number">02</span>
+              <span class="project-name">Oneflare</span>
               <p class="project-desc">
-                An Airtasker company that connects Australians with qualified
-                local service providers. Customers describe what they need, and
-                businesses compete to offer the best quotesmaking hiring fast
-                and stress-free.
+                Connects Australians with qualified local service providers.
+                Customers describe what they need, and businesses compete to
+                offer the best quotes.
               </p>
               <div class="project-tags">
                 <span class="tag">Services</span>
                 <span class="tag">Marketplace</span>
-                <span class="tag">Australia</span>
+                <span class="tag">Angular</span>
+              </div>
+              <div class="project-links">
+                <a href="https://www.oneflare.com.au" target="_blank" rel="noopener">Visit site <span class="project-arrow">↗</span></a>
               </div>
             </div>
           </div>
 
-          <div class="project-card">
-            <img
-              src="project-pursuited.png"
-              alt="Pursuited"
-              class="project-preview"
-            />
+          <!-- Card 3 -->
+          <div class="project-card" data-href="https://www.pursuited.com">
+            <img src="project-pursuited.png" alt="Pursuited" class="project-preview" />
             <div class="project-body">
-              <div class="project-header">
-                <span class="project-name">Pursuited</span>
-                <div class="project-links">
-                  <a
-                    href="https://www.pursuited.com"
-                    target="_blank"
-                    rel="noopener"
-                    >Live ↗</a
-                  >
-                </div>
-              </div>
+              <span class="project-number">03</span>
+              <span class="project-name">Pursuited</span>
               <p class="project-desc">
-                A smart job-matching platform that flips the hiring
-                modelcandidates get headhunted for their dream roles. Generate a
-                profile in 60 seconds, compare against the market, and receive
-                secure, risk-free job offers.
+                A smart job-matching platform that flips the hiring model &mdash;
+                candidates get headhunted for their dream roles in 60 seconds.
               </p>
               <div class="project-tags">
                 <span class="tag">Recruiting</span>
                 <span class="tag">Platform</span>
-                <span class="tag">Job Market</span>
+                <span class="tag">React</span>
+              </div>
+              <div class="project-links">
+                <a href="https://www.pursuited.com" target="_blank" rel="noopener">Visit site <span class="project-arrow">↗</span></a>
               </div>
             </div>
           </div>
+
         </div>
       </div>
     </section>
@@ -1525,79 +1472,13 @@
         { passive: true },
       );
 
-      // Cursor spotlight
-      const glow = document.getElementById("cursor-glow");
-      let mx = window.innerWidth / 2,
-        my = window.innerHeight / 2;
-      let cx = mx,
-        cy = my;
-      let isOverInteractive = false;
-
-      // Particle trail — spawns a dot every N pixels of movement
-      let lastParticleX = 0,
-        lastParticleY = 0;
-      const PARTICLE_DIST = 40;
-
-      function spawnParticle(x, y) {
-        const p = document.createElement("div");
-        p.className = "cursor-particle";
-        p.style.left = x + "px";
-        p.style.top = y + "px";
-        document.body.appendChild(p);
-        p.addEventListener("animationend", () => p.remove());
-      }
-
-      document.addEventListener("mousemove", (e) => {
-        mx = e.clientX;
-        my = e.clientY;
-
-        // Spawn trail particles at intervals
-        const dx = mx - lastParticleX;
-        const dy = my - lastParticleY;
-        if (dx * dx + dy * dy > PARTICLE_DIST * PARTICLE_DIST) {
-          spawnParticle(mx, my);
-          lastParticleX = mx;
-          lastParticleY = my;
-        }
+      // Project card click-to-navigate
+      document.querySelectorAll('.project-card[data-href]').forEach(card => {
+        card.addEventListener('click', (e) => {
+          if (e.target.closest('a')) return; // let inner links work normally
+          window.open(card.dataset.href, '_blank', 'noopener');
+        });
       });
-
-      // Glow expand when hovering interactive elements
-      const interactiveSelector = "a, .btn, .stack-item, .project-card";
-
-      document.addEventListener("mouseover", (e) => {
-        if (e.target.closest(interactiveSelector)) {
-          glow.classList.add("expanded");
-          isOverInteractive = true;
-        }
-      });
-
-      document.addEventListener("mouseout", (e) => {
-        if (e.target.closest(interactiveSelector)) {
-          glow.classList.remove("expanded");
-          isOverInteractive = false;
-        }
-      });
-
-      // Click ripple
-      document.addEventListener("click", (e) => {
-        const ripple = document.createElement("div");
-        ripple.className = "click-ripple";
-        ripple.style.left = e.clientX + "px";
-        ripple.style.top = e.clientY + "px";
-        document.body.appendChild(ripple);
-        ripple.addEventListener("animationend", () => ripple.remove());
-      });
-
-
-      // Smooth cursor follow
-      (function raf() {
-        const speed = isOverInteractive ? 0.12 : 0.08;
-        cx += (mx - cx) * speed;
-        cy += (my - cy) * speed;
-        const half = isOverInteractive ? 360 : 280;
-        glow.style.transform = `translate(${cx - half}px, ${cy - half}px)`;
-        requestAnimationFrame(raf);
-      })();
 
       // Section fade-in
       const fadeObserver = new IntersectionObserver(
