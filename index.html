@@ -895,9 +895,19 @@
         100% { top: 100%; opacity: 0; }
       }
 
-      /* Responsive: hide on small screens */
+      /* Responsive holo: show fewer, smaller panels on smaller screens */
+      @media (max-width: 1200px) {
+        .holo-panel { width: 320px !important; font-size: 11px; }
+        .holo-panel:nth-child(n+5) { display: none; }
+      }
       @media (max-width: 768px) {
-        #holo-bg { display: none; }
+        #holo-bg { opacity: 0.45; }
+        .holo-panel { width: 260px !important; font-size: 10px; padding: 14px 16px; }
+        .holo-panel:nth-child(n+4) { display: none; }
+      }
+      @media (max-width: 480px) {
+        .holo-panel { width: 200px !important; font-size: 9px; padding: 10px 12px; }
+        .holo-panel:nth-child(n+3) { display: none; }
       }
 
       /* Scroll focus highlight */
@@ -1008,6 +1018,30 @@
       }
 
       /* ── Responsive ── */
+      @media (max-width: 768px) {
+        .project-preview {
+          height: 160px;
+        }
+
+        .project-body {
+          padding: 18px;
+        }
+
+        .project-name {
+          font-size: 15px;
+        }
+
+        .project-desc {
+          font-size: 13px;
+          margin-bottom: 14px;
+        }
+
+        .tag {
+          font-size: 10px;
+          padding: 2px 8px;
+        }
+      }
+
       @media (max-width: 600px) {
         .nav-links {
           gap: 20px;
@@ -1016,6 +1050,37 @@
         .project-header {
           flex-direction: column;
           gap: 8px;
+        }
+
+        .project-preview {
+          height: 130px;
+        }
+
+        .project-body {
+          padding: 14px;
+        }
+
+        .project-name {
+          font-size: 14px;
+        }
+
+        .project-desc {
+          font-size: 12px;
+          line-height: 1.6;
+          margin-bottom: 12px;
+        }
+
+        .project-tags {
+          gap: 6px;
+        }
+
+        .tag {
+          font-size: 9.5px;
+          padding: 2px 7px;
+        }
+
+        .carousel-controls {
+          margin-top: 16px;
         }
 
         footer .container {
@@ -1034,7 +1099,7 @@
     <div id="holo-bg" aria-hidden="true">
 
       <!-- Panel 1: React + TypeScript Component (top-left) -->
-      <div class="holo-panel" data-speed="0.02" style="top: 2%; left: -12%; width: 480px; transform: rotateY(18deg) rotateX(-2deg);">
+      <div class="holo-panel" data-speed="0.02" style="top: 2%; left: -12%; width: 480px; transform: rotateY(18deg) rotateX(-2deg) translateY(15px);">
         <div class="scan-line"></div>
         <div class="panel-title">Dashboard.tsx &mdash; react</div>
         <div class="holo-code-line"><span class="holo-line-num">1</span><span class="holo-keyword">import</span> <span class="holo-type">React</span>, { <span class="holo-func">useState</span> } <span class="holo-keyword">from</span> <span class="holo-string">'react'</span></div>
@@ -1067,7 +1132,7 @@
       </div>
 
       <!-- Panel 2: TypeScript Types (top-right) -->
-      <div class="holo-panel" data-speed="0.025" style="top: 12%; right: -6%; width: 460px; transform: rotateY(-18deg) rotateX(2deg);">
+      <div class="holo-panel" data-speed="0.025" style="top: 12%; right: -6%; width: 460px; transform: rotateY(-18deg) rotateX(2deg) translateX(-30px);">
         <div class="scan-line" style="animation-delay: -1.5s;"></div>
         <div class="panel-title">types.ts &mdash; typescript</div>
         <div class="holo-code-line"><span class="holo-line-num">1</span><span class="holo-keyword">type</span> <span class="holo-type">Status</span> = <span class="holo-string">'idle'</span> | <span class="holo-string">'loading'</span> | <span class="holo-string">'success'</span> | <span class="holo-string">'error'</span></div>
@@ -1093,7 +1158,7 @@
       </div>
 
       <!-- Panel 3: Playwright + Cypress Tests (bottom-right) -->
-      <div class="holo-panel" data-speed="0.04" style="top: 85%; right: -5%; width: 440px; transform: rotateY(-16deg) rotateX(1deg);">
+      <div class="holo-panel" data-speed="0.04" style="top: 85%; right: -5%; width: 440px; transform: rotateY(-16deg) rotateX(1deg) translateY(-25px);">
         <div class="scan-line" style="animation-delay: -2.8s;"></div>
         <div class="panel-title">e2e.spec.ts &mdash; playwright + cypress</div>
         <div class="holo-code-line"><span class="holo-line-num">1</span><span class="holo-keyword">import</span> { <span class="holo-func">test</span>, <span class="holo-func">expect</span> } <span class="holo-keyword">from</span> <span class="holo-string">'@playwright/test'</span></div>
@@ -1114,7 +1179,7 @@
       </div>
 
       <!-- Panel 4: Performance Metrics (mid-right) -->
-      <div class="holo-panel" data-speed="0.03" style="top: 42%; right: -4%; width: 440px; transform: rotateY(-15deg) rotateX(-1deg);">
+      <div class="holo-panel" data-speed="0.03" style="top: 42%; right: -4%; width: 440px; transform: rotateY(-15deg) rotateX(-1deg) translateX(20px) translateY(30px);">
         <div class="scan-line" style="animation-delay: -3.5s;"></div>
         <div class="panel-title">performance &mdash; web vitals</div>
         <div class="holo-metric"><span>LCP</span><span class="holo-metric-value" style="color: rgba(74,222,128,0.4);">1.2s</span></div>
@@ -1140,7 +1205,7 @@
       </div>
 
       <!-- Panel 5: CI/CD + Build Output (bottom-left) -->
-      <div class="holo-panel" data-speed="0.035" style="top: 65%; left: -12%; width: 460px; transform: rotateY(14deg) rotateX(-2deg);">
+      <div class="holo-panel" data-speed="0.035" style="top: 65%; left: -12%; width: 460px; transform: rotateY(14deg) rotateX(-2deg) translateX(30px) translateY(-15px);">
         <div class="scan-line" style="animation-delay: -0.7s;"></div>
         <div class="panel-title">github actions &mdash; ci/cd pipeline</div>
         <div class="holo-terminal-line"><span style="color:rgba(74,222,128,0.35);">&#10003;</span> npm ci <span class="holo-output" style="float:right;">12s</span></div>
@@ -1626,19 +1691,26 @@
       const holoPanels = document.querySelectorAll('.holo-panel');
       const holoData = [];
 
+      // Randomly pick 1-2 panels to persist while scrolling
+      const keepCount = 1 + Math.floor(Math.random() * 2);
+      const keepSet = new Set();
+      while (keepSet.size < keepCount) keepSet.add(Math.floor(Math.random() * holoPanels.length));
+
       // Store base transforms and assign random float params
       holoPanels.forEach((panel, i) => {
-        const angle = Math.random() * Math.PI * 2; // random direction per panel
+        const angle = Math.random() * Math.PI * 2;
         holoData[i] = {
           baseTransform: panel.style.transform || '',
-          baseOpacity: parseFloat(panel.style.opacity) || 1,
           phase: Math.random() * Math.PI * 2,
           ampY: 4 + Math.random() * 8,
           ampX: 2 + Math.random() * 5,
           freq: 0.0004 + Math.random() * 0.0006,
           speed: parseFloat(panel.dataset.speed) || 0.03,
           dirX: Math.cos(angle),
-          dirY: Math.sin(angle)
+          dirY: Math.sin(angle),
+          keepVisible: keepSet.has(i),
+          currentOpacity: 1,
+          slideOut: 0
         };
       });
 
@@ -1647,22 +1719,50 @@
         const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
         const scrollRatio = maxScroll > 0 ? scrollY / maxScroll : 0;
         const now = performance.now();
+        const vh = window.innerHeight;
 
         holoPanels.forEach((panel, i) => {
           const d = holoData[i];
+          const rect = panel.getBoundingClientRect();
+          const inView = rect.bottom > -100 && rect.top < vh + 100;
+
+          // Determine target opacity
+          let targetOpacity;
+          if (d.keepVisible) {
+            // Persistent panels dim slightly but stay
+            targetOpacity = Math.max(0.3, 1 - scrollRatio * 0.5);
+          } else if (!inView && scrollRatio > 0.05) {
+            // Off-screen and user has scrolled — fade out
+            targetOpacity = 0;
+          } else {
+            // Staggered fade based on scroll position
+            const fadeStart = 0.08 + (i / holoPanels.length) * 0.35;
+            const fadeEnd = fadeStart + 0.18;
+            targetOpacity = scrollRatio <= fadeStart ? 1
+              : scrollRatio >= fadeEnd ? 0
+              : 1 - (scrollRatio - fadeStart) / (fadeEnd - fadeStart);
+          }
+
+          // Smooth lerp toward target
+          d.currentOpacity += (targetOpacity - d.currentOpacity) * 0.08;
+          if (d.currentOpacity < 0.01) d.currentOpacity = 0;
+
+          panel.style.opacity = d.currentOpacity;
+
+          // Slide panels outward as they fade
+          const slideFactor = (1 - d.currentOpacity) * 60 * d.dirX;
 
           // Gentle idle floating
           const floatY = Math.sin(now * d.freq + d.phase) * d.ampY;
           const floatX = Math.cos(now * d.freq * 0.7 + d.phase) * d.ampX;
 
-          // Parallax drift in each panel's own random direction
+          // Parallax drift
           const parallaxX = scrollY * d.speed * d.dirX;
           const parallaxY = scrollY * d.speed * d.dirY;
 
-          // Slight 3D rotation shift based on scroll for depth effect
           const rotShift = scrollRatio * 4 * d.dirX;
 
-          panel.style.transform = `${d.baseTransform} translate3d(${floatX + parallaxX}px, ${floatY + parallaxY}px, 0px) rotateY(${rotShift}deg)`;
+          panel.style.transform = `${d.baseTransform} translate3d(${floatX + parallaxX + slideFactor}px, ${floatY + parallaxY}px, 0px) rotateY(${rotShift}deg)`;
         });
 
         requestAnimationFrame(updateHoloPanels);
